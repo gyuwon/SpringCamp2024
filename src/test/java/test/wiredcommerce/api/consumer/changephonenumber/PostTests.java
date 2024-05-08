@@ -20,7 +20,7 @@ import wiredcommerce.consumer.view.ConsumerView;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static test.wiredcommerce.api.ApiTestLanguage.changePhoneNumber;
-import static test.wiredcommerce.api.ApiTestLanguage.issueToken;
+import static test.wiredcommerce.api.ApiTestLanguage.issueConsumerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.meAsConsumer;
 import static test.wiredcommerce.api.ApiTestLanguage.signUp;
 
@@ -40,7 +40,7 @@ public class PostTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<ChangePhoneNumber> request = RequestEntity
@@ -65,7 +65,7 @@ public class PostTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
         changePhoneNumber(client, token, changePhoneNumber);
 
         // Act
@@ -90,7 +90,7 @@ public class PostTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<ChangePhoneNumber> request = RequestEntity
@@ -112,7 +112,7 @@ public class PostTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<ChangePhoneNumber> request = RequestEntity

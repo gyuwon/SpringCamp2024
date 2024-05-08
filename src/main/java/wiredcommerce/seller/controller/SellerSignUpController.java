@@ -17,6 +17,7 @@ public record SellerSignUpController(SellerJpaRepository repository) {
             .builder()
             .email(command.email())
             .encodedPassword(command.password())
+            .phoneNumber(command.phoneNumber())
             .build();
         try {
             repository.save(seller);

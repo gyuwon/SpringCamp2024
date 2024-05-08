@@ -16,7 +16,7 @@ import wiredcommerce.data.ConsumerJpaRepository;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
-import static test.wiredcommerce.api.ApiTestLanguage.issueToken;
+import static test.wiredcommerce.api.ApiTestLanguage.issueConsumerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.signUp;
 
 @SpringBootTest(
@@ -35,7 +35,7 @@ public class GetTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<Void> request = RequestEntity
@@ -57,7 +57,7 @@ public class GetTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<Void> request = RequestEntity
@@ -81,7 +81,7 @@ public class GetTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
 
         // Act
         RequestEntity<Void> request = RequestEntity
@@ -106,7 +106,7 @@ public class GetTests {
     ) {
         // Arrange
         signUp(client, signUp);
-        String token = issueToken(client, signUp.email(), signUp.password());
+        String token = issueConsumerToken(client, signUp.email(), signUp.password());
         ConsumerEntity consumer = repository.findByEmail(signUp.email()).orElseThrow();
         repository.delete(consumer);
 

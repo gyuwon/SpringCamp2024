@@ -16,14 +16,11 @@ public final class ApiTestLanguage {
         client.postForObject("/api/consumer/signup", signUp, Void.class);
     }
 
-    public static void signUp(
+    public static String issueConsumerToken(
         TestRestTemplate client,
-        wiredcommerce.seller.command.SignUp signUp
+        String email,
+        String password
     ) {
-        client.postForObject("/api/seller/signup", signUp, Void.class);
-    }
-
-    public static String issueToken(TestRestTemplate client, String email, String password) {
         TokenCarrier carrier = client.postForObject(
             "/api/consumer/issue-token",
             new IssueToken(email, password),
@@ -50,5 +47,25 @@ public final class ApiTestLanguage {
             .header("Authorization", "Bearer " + token)
             .body(command);
         client.exchange(request, Void.class);
+    }
+
+    public static void signUp(
+        TestRestTemplate client,
+        wiredcommerce.seller.command.SignUp signUp
+    ) {
+        client.postForObject("/api/seller/signup", signUp, Void.class);
+    }
+
+    public static String issueSellerToken(
+        TestRestTemplate client,
+        String email,
+        String password
+    ) {
+        TokenCarrier carrier = client.postForObject(
+            "/api/seller/issue-token",
+            new IssueToken(email, password),
+            TokenCarrier.class
+        );
+        return carrier.token();
     }
 }

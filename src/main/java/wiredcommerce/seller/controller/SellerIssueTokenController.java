@@ -20,7 +20,7 @@ public record SellerIssueTokenController(
         return repository
             .findByEmail(query.email())
             .filter(seller -> seller.getEncodedPassword().equals(query.password()))
-            .map(seller -> jwtComposer.compose("subject"))
+            .map(seller -> jwtComposer.compose(seller.getId().toString()))
             .map(TokenCarrier::new)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.badRequest().build());
