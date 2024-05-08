@@ -1,9 +1,6 @@
 package test.wiredcommerce.api.consumer.changephonenumber;
 
-import autoparams.AutoSource;
-import autoparams.BrakeBeforeAnnotation;
 import autoparams.MethodAutoSource;
-import autoparams.customization.Customization;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,7 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import test.wiredcommerce.api.consumer.ChangePhoneNumberGenerator;
+import test.wiredcommerce.api.AutoDomainSource;
+import test.wiredcommerce.api.AutoDomainSourceConfiguration;
 import wiredcommerce.CommerceApplication;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
 import wiredcommerce.consumer.command.SignUp;
@@ -34,9 +32,7 @@ import static test.wiredcommerce.api.ApiTestLanguage.signUp;
 public class PostTests {
 
     @ParameterizedTest
-    @AutoSource
-    @Customization(ChangePhoneNumberGenerator.class)
-    @BrakeBeforeAnnotation(Autowired.class)
+    @AutoDomainSource
     void 올바르게_전화번호를_변경한다(
         SignUp signUp,
         ChangePhoneNumber changePhoneNumber,
@@ -60,8 +56,7 @@ public class PostTests {
 
     @ParameterizedTest
     @MethodAutoSource("wrongPhoneNumbers")
-    @Customization(ChangePhoneNumberGenerator.class)
-    @BrakeBeforeAnnotation(Autowired.class)
+    @AutoDomainSourceConfiguration
     void 전화번호가_유효하지_않으면_전화번호를_변경하지_않는다(
         String wrongPhoneNumber,
         SignUp signUp,
@@ -87,7 +82,7 @@ public class PostTests {
 
     @ParameterizedTest
     @MethodAutoSource("wrongPhoneNumbers")
-    @BrakeBeforeAnnotation(Autowired.class)
+    @AutoDomainSourceConfiguration
     void 전화번호가_유효하지_않으면_400_상태코드를_반환한다(
         String wrongPhoneNumber,
         SignUp signUp,
@@ -109,9 +104,7 @@ public class PostTests {
     }
 
     @ParameterizedTest
-    @AutoSource
-    @Customization(ChangePhoneNumberGenerator.class)
-    @BrakeBeforeAnnotation(Autowired.class)
+    @AutoDomainSource
     void 전화번호가_유효하면_204_상태코드를_반환한다(
         SignUp signUp,
         ChangePhoneNumber changePhoneNumber,
