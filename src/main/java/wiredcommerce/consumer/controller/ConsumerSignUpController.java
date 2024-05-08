@@ -1,6 +1,7 @@
 package wiredcommerce.consumer.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,14 +10,17 @@ import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
 
 @RestController
-public record ConsumerSignUpController(ConsumerJpaRepository repository) {
+public record ConsumerSignUpController(
+    ConsumerJpaRepository repository,
+    PasswordEncoder passwordEncoder
+) {
 
     @PostMapping("/api/consumer/signup")
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
         ConsumerEntity consumer = ConsumerEntity
             .builder()
             .email(command.email())
-            .password(command.password())
+            .encodedPassword(passwordEncoder.encode(command.password()))
             .build();
         try {
             repository.save(consumer);

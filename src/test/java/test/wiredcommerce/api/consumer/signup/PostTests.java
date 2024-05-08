@@ -1,14 +1,18 @@
 package test.wiredcommerce.api.consumer.signup;
 
 import autoparams.AutoSource;
+import autoparams.BrakeBeforeAnnotation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import wiredcommerce.CommerceApplication;
 import wiredcommerce.consumer.command.SignUp;
+import wiredcommerce.data.ConsumerEntity;
+import wiredcommerce.data.ConsumerJpaRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,5 +50,22 @@ public record PostTests(@Autowired TestRestTemplate client) {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @BrakeBeforeAnnotation(Autowired.class)
+    void 비밀번호를_암호화한다(
+        SignUp signUp,
+        @Autowired ConsumerJpaRepository repository,
+        @Autowired PasswordEncoder passwordEncoder
+    ) {
+        // Act
+        client.postForEntity("/api/consumer/signup", signUp, Void.class);
+
+        // Assert
+        ConsumerEntity consumer = repository.findByEmail(signUp.email()).orElseThrow();
+        String encodedPassword = consumer.getEncodedPassword();
+        assertThat(passwordEncoder.matches(signUp.password(), encodedPassword)).isTrue();
     }
 }

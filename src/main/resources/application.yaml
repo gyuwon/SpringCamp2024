@@ -1,3 +1,6 @@
 security:
   jwt:
     secret: 35f5eebf-1ac7-4684-afc8-8ffd0b4b8606
+  password:
+    encoder:
+      secret: ea413f43-16f2-421c-8cf2-45b598fc9634
