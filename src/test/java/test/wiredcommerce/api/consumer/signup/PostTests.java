@@ -2,6 +2,7 @@ package test.wiredcommerce.api.consumer.signup;
 
 import autoparams.AutoSource;
 import autoparams.BrakeBeforeAnnotation;
+import autoparams.ValueAutoSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,28 @@ public record PostTests(@Autowired TestRestTemplate client) {
         ConsumerEntity consumer = repository.findByEmail(signUp.email()).orElseThrow();
         String encodedPassword = consumer.getEncodedPassword();
         assertThat(passwordEncoder.matches(signUp.password(), encodedPassword)).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueAutoSource(strings = {
+        "invalid-email",
+        "invalid-email@",
+        "@domain",
+        "invalid-email@domain.",
+        "invalid-email@@domain",
+    })
+    void 잘못된_형식의_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다(
+        String email,
+        String password
+    ) {
+        // Arrange
+        String path = "/api/consumer/signup";
+        SignUp signUp = new SignUp(email, password);
+
+        // Act
+        ResponseEntity<Void> response = client.postForEntity(path, signUp, Void.class);
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
     }
 }

@@ -17,11 +17,18 @@ public record ConsumerSignUpController(
 
     @PostMapping("/api/consumer/signup")
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
+        String email = command.email();
+
+        if (email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$") == false) {
+            return ResponseEntity.badRequest().build();
+        }
+
         ConsumerEntity consumer = ConsumerEntity
             .builder()
-            .email(command.email())
+            .email(email)
             .encodedPassword(passwordEncoder.encode(command.password()))
             .build();
+
         try {
             repository.save(consumer);
         } catch (Exception exception) {
