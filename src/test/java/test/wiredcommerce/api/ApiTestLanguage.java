@@ -3,15 +3,24 @@ package test.wiredcommerce.api;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
-import wiredcommerce.consumer.command.SignUp;
-import wiredcommerce.consumer.query.IssueToken;
-import wiredcommerce.consumer.result.TokenCarrier;
 import wiredcommerce.consumer.view.ConsumerView;
+import wiredcommerce.query.IssueToken;
+import wiredcommerce.result.TokenCarrier;
 
 public final class ApiTestLanguage {
 
-    public static void signUp(TestRestTemplate client, SignUp signUp) {
+    public static void signUp(
+        TestRestTemplate client,
+        wiredcommerce.consumer.command.SignUp signUp
+    ) {
         client.postForObject("/api/consumer/signup", signUp, Void.class);
+    }
+
+    public static void signUp(
+        TestRestTemplate client,
+        wiredcommerce.seller.command.SignUp signUp
+    ) {
+        client.postForObject("/api/seller/signup", signUp, Void.class);
     }
 
     public static String issueToken(TestRestTemplate client, String email, String password) {

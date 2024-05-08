@@ -13,7 +13,11 @@ public record SellerSignUpController(SellerJpaRepository repository) {
 
     @PostMapping("/api/seller/signup")
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
-        SellerEntity seller = SellerEntity.builder().email(command.email()).build();
+        SellerEntity seller = SellerEntity
+            .builder()
+            .email(command.email())
+            .encodedPassword(command.password())
+            .build();
         try {
             repository.save(seller);
         } catch (Exception exception) {

@@ -1,4 +1,4 @@
-package wiredcommerce.consumer.result;
+package wiredcommerce.result;
 
 public record TokenCarrier(String token) {
 }
