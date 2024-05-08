@@ -1,0 +1,3 @@
+security:
+  jwt:
+    secret: 35f5eebf-1ac7-4684-afc8-8ffd0b4b8606

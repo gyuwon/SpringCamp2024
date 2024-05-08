@@ -1,19 +1,26 @@
 package test.wiredcommerce.api.consumer.issuetoken;
 
+import java.util.Objects;
+import javax.crypto.spec.SecretKeySpec;
+
 import autoparams.AutoSource;
 import autoparams.BrakeBeforeAnnotation;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import wiredcommerce.CommerceApplication;
 import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.consumer.query.IssueToken;
 import wiredcommerce.consumer.result.TokenCarrier;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
@@ -82,5 +89,33 @@ public class PostTests {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @ParameterizedTest
+    @AutoSource
+    @BrakeBeforeAnnotation({ Autowired.class, Value.class })
+    void 올바른_정보를_사용해_요청하면_JWT를_반환한다(
+        SignUp signUp,
+        @Autowired TestRestTemplate client,
+        @Value("${security.jwt.secret}") String jwtSecret
+    ) {
+        // Arrange
+        client.postForEntity("/api/consumer/signup", signUp, Void.class);
+
+        // Act
+        ResponseEntity<TokenCarrier> response = client.postForEntity(
+            "/api/consumer/issue-token",
+            new IssueToken(signUp.email(), signUp.password()),
+            TokenCarrier.class
+        );
+
+        // Assert
+        String token = Objects.requireNonNull(response.getBody()).token();
+        assertDoesNotThrow(() -> getJwtDecoder(jwtSecret).decode(token));
+    }
+
+    private static JwtDecoder getJwtDecoder(String jwtSecret) {
+        var key = new SecretKeySpec(jwtSecret.getBytes(), "HmacSHA256");
+        return NimbusJwtDecoder.withSecretKey(key).build();
     }
 }
