@@ -6,8 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import test.wiredcommerce.api.AutoDomainSource;
 import wiredcommerce.CommerceApplication;
+import wiredcommerce.data.SellerEntity;
+import wiredcommerce.data.SellerJpaRepository;
 import wiredcommerce.seller.command.SignUp;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,5 +53,25 @@ public class PostTests {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @ParameterizedTest
+    @AutoDomainSource
+    void 비밀번호를_암호화한다(
+        SignUp signUp,
+        @Autowired TestRestTemplate client,
+        @Autowired SellerJpaRepository repository,
+        @Autowired PasswordEncoder passwordEncoder
+    ) {
+        // Arrange
+        String path = "/api/seller/signup";
+
+        // Act
+        client.postForEntity(path, signUp, Void.class);
+
+        // Assert
+        SellerEntity seller = repository.findByEmail(signUp.email()).orElseThrow();
+        String encodedPassword = seller.getEncodedPassword();
+        assertThat(passwordEncoder.matches(signUp.password(), encodedPassword)).isTrue();
     }
 }
