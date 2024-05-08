@@ -30,4 +30,7 @@ public class ConsumerEntity {
     @Setter
     @Column(length = 1000)
     private String encodedPassword;
+
+    @Setter
+    private String phoneNumber;
 }
