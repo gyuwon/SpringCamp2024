@@ -34,6 +34,7 @@ public class SecurityConfiguration {
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/consumer/signup").permitAll()
                 .requestMatchers("/api/consumer/issue-token").permitAll()
+                .requestMatchers("/api/seller/signup").permitAll()
                 .anyRequest().authenticated())
             .build();
     }
