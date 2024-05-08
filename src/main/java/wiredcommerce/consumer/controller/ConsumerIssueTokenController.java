@@ -24,7 +24,7 @@ public record ConsumerIssueTokenController(
                 query.password(),
                 consumer.getEncodedPassword()
             ))
-            .map(consumer -> jwtComposer.compose("subject"))
+            .map(consumer -> jwtComposer.compose(consumer.getId().toString()))
             .map(TokenCarrier::new)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.badRequest().build());

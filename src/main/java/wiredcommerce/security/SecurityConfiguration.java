@@ -12,11 +12,6 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 public class SecurityConfiguration {
 
     @Bean
-    public JwtProvider jwtProvider(@Value("${security.jwt.secret}") String jwtSecret) {
-        return JwtProvider.create(jwtSecret);
-    }
-
-    @Bean
     public Pbkdf2PasswordEncoder passwordEncoder(
         @Value("${security.password.encoder.secret}") String passwordEncoderSecret
     ) {
@@ -30,13 +25,16 @@ public class SecurityConfiguration {
 
     @Bean
     public DefaultSecurityFilterChain securityFilterChain(
-        HttpSecurity http
+        HttpSecurity http,
+        JwtProvider jwtProvider
     ) throws Exception {
         return http
             .csrf(AbstractHttpConfigurer::disable)
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtProvider))
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/api/consumer/signup").permitAll()
-                .requestMatchers("/api/consumer/issue-token").permitAll())
+                .requestMatchers("/api/consumer/issue-token").permitAll()
+                .anyRequest().authenticated())
             .build();
     }
 }
