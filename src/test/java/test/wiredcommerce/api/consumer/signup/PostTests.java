@@ -1,9 +1,8 @@
 package test.wiredcommerce.api.consumer.signup;
 
-import java.util.UUID;
-
+import autoparams.AutoSource;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -20,32 +19,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("POST /api/consumer/signup")
 public record PostTests(@Autowired TestRestTemplate client) {
 
-    @Test
-    void 올바른_정보를_사용해_요청하면_성공_상태코드를_반환한다() {
-        // Arrange
+    @ParameterizedTest
+    @AutoSource
+    void 올바른_정보를_사용해_요청하면_성공_상태코드를_반환한다(SignUp signUp) {
         String path = "/api/consumer/signup";
-        var command = new SignUp(UUID.randomUUID() + "@test.com", "my password");
-
-        // Act
-        ResponseEntity<Void> response = client.postForEntity(path, command, Void.class);
-
-        // Assert
+        ResponseEntity<Void> response = client.postForEntity(path, signUp, Void.class);
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     }
 
-    @Test
-    void 존재하는_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다() {
+    @ParameterizedTest
+    @AutoSource
+    void 존재하는_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다(
+        SignUp signUp,
+        String otherPassword
+    ) {
         // Arrange
         String path = "/api/consumer/signup";
-        String email = UUID.randomUUID() + "@test.com";
-        String password1 = "my password 1";
-        String password2 = "my password 2";
-        client.postForEntity(path, new SignUp(email, password1), Void.class);
+        client.postForEntity(path, signUp, Void.class);
 
         // Act
         ResponseEntity<Void> response = client.postForEntity(
             path,
-            new SignUp(email, password2),
+            new SignUp(signUp.email(), otherPassword),
             Void.class
         );
 
