@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import test.wiredcommerce.api.AutoDomainSource;
+import test.wiredcommerce.AutoDomainSource;
 import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.consumer.view.ConsumerView;
 import wiredcommerce.data.ConsumerEntity;

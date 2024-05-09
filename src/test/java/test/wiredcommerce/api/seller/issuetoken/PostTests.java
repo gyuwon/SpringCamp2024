@@ -12,7 +12,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import test.wiredcommerce.api.AutoDomainSource;
+import test.wiredcommerce.AutoDomainSource;
 import wiredcommerce.query.IssueToken;
 import wiredcommerce.result.TokenCarrier;
 import wiredcommerce.seller.command.SignUp;

@@ -1,4 +1,4 @@
-package wiredcommerce.model;
+package wiredcommerce.commandmodel;
 
 public class Patterns {
 

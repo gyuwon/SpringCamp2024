@@ -5,9 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import wiredcommerce.commandmodel.Patterns;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
-import wiredcommerce.model.Patterns;
 import wiredcommerce.seller.command.SignUp;
 
 @RestController

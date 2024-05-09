@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import test.wiredcommerce.api.AutoDomainSource;
+import test.wiredcommerce.AutoDomainSource;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
 import wiredcommerce.seller.command.SignUp;

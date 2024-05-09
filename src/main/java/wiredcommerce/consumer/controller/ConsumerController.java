@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import wiredcommerce.commandmodel.Patterns;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
 import wiredcommerce.consumer.view.ConsumerView;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
-import wiredcommerce.model.Patterns;
 
 @RestController
 public record ConsumerController(ConsumerJpaRepository repository) {

@@ -1,4 +1,4 @@
-package test.wiredcommerce.api;
+package test.wiredcommerce;
 
 import java.util.concurrent.ThreadLocalRandom;
 

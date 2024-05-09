@@ -25,6 +25,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.github.autoparams:autoparams:8.3.0")
+    testImplementation("io.github.autoparams:autoparams-mockito:8.3.0")
 }
 
 tasks.withType<Test> {

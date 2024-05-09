@@ -5,10 +5,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import wiredcommerce.commandmodel.Patterns;
 import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
-import wiredcommerce.model.Patterns;
 
 @RestController
 public record ConsumerSignUpController(
