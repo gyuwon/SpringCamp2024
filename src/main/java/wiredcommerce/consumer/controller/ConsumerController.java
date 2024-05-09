@@ -11,6 +11,7 @@ import wiredcommerce.consumer.command.ChangePhoneNumber;
 import wiredcommerce.consumer.view.ConsumerView;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
+import wiredcommerce.model.Patterns;
 
 @RestController
 public record ConsumerController(ConsumerJpaRepository repository) {
@@ -31,7 +32,7 @@ public record ConsumerController(ConsumerJpaRepository repository) {
         Principal principal,
         @RequestBody ChangePhoneNumber command
     ) {
-        if (command.phoneNumber().matches("^010-\\d{4}-\\d{4}$")) {
+        if (command.phoneNumber().matches(Patterns.PHONE_NUMBER)) {
             ConsumerEntity consumer = repository.get(principal);
             consumer.setPhoneNumber(command.phoneNumber());
             repository.save(consumer);

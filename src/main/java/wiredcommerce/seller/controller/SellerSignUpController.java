@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
+import wiredcommerce.model.Patterns;
 import wiredcommerce.seller.command.SignUp;
 
 @RestController
@@ -17,17 +18,27 @@ public record SellerSignUpController(
 
     @PostMapping("/api/seller/signup")
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
+        if (command.email().matches(Patterns.EMAIL) == false) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        if (command.phoneNumber().matches(Patterns.PHONE_NUMBER) == false) {
+            return ResponseEntity.badRequest().build();
+        }
+
         SellerEntity seller = SellerEntity
             .builder()
             .email(command.email())
             .encodedPassword(passwordEncoder.encode(command.password()))
             .phoneNumber(command.phoneNumber())
             .build();
+
         try {
             repository.save(seller);
         } catch (Exception exception) {
             return ResponseEntity.badRequest().build();
         }
+
         return ResponseEntity.ok().build();
     }
 }

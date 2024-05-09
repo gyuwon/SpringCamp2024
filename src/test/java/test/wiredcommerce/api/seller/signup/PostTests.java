@@ -1,5 +1,6 @@
 package test.wiredcommerce.api.seller.signup;
 
+import autoparams.MethodAutoSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import test.wiredcommerce.api.AutoDomainSource;
+import test.wiredcommerce.api.AutoDomainSourceConfiguration;
 import wiredcommerce.CommerceApplication;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
@@ -73,5 +75,45 @@ public class PostTests {
         SellerEntity seller = repository.findByEmail(signUp.email()).orElseThrow();
         String encodedPassword = seller.getEncodedPassword();
         assertThat(passwordEncoder.matches(signUp.password(), encodedPassword)).isTrue();
+    }
+
+    @ParameterizedTest
+    @MethodAutoSource("test.wiredcommerce.api.TestArguments#invalidEmails")
+    @AutoDomainSourceConfiguration
+    void 잘못된_형식의_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다(
+        String email,
+        String password,
+        String phoneNumber,
+        @Autowired TestRestTemplate client
+    ) {
+        // Arrange
+        String path = "/api/seller/signup";
+        var signUp = new SignUp(email, password, phoneNumber);
+
+        // Act
+        ResponseEntity<Void> response = client.postForEntity(path, signUp, Void.class);
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
+
+    @ParameterizedTest
+    @MethodAutoSource("test.wiredcommerce.api.TestArguments#invalidPhoneNumbers")
+    @AutoDomainSourceConfiguration
+    void 잘못된_형식의_전화번호를_사용해_요청하면_400_상태코드를_반환한다(
+        String phoneNumber,
+        String email,
+        String password,
+        @Autowired TestRestTemplate client
+    ) {
+        // Arrange
+        String path = "/api/seller/signup";
+        var signUp = new SignUp(email, password, phoneNumber);
+
+        // Act
+        ResponseEntity<Void> response = client.postForEntity(path, signUp, Void.class);
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
     }
 }

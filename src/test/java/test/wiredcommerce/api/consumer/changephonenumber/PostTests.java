@@ -4,7 +4,6 @@ import autoparams.MethodAutoSource;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -18,7 +17,6 @@ import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.consumer.view.ConsumerView;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static test.wiredcommerce.api.ApiTestLanguage.changePhoneNumber;
 import static test.wiredcommerce.api.ApiTestLanguage.issueConsumerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.meAsConsumer;
@@ -55,7 +53,7 @@ public class PostTests {
     }
 
     @ParameterizedTest
-    @MethodAutoSource("wrongPhoneNumbers")
+    @MethodAutoSource("test.wiredcommerce.api.TestArguments#invalidPhoneNumbers")
     @AutoDomainSourceConfiguration
     void 전화번호가_유효하지_않으면_전화번호를_변경하지_않는다(
         String wrongPhoneNumber,
@@ -81,7 +79,7 @@ public class PostTests {
     }
 
     @ParameterizedTest
-    @MethodAutoSource("wrongPhoneNumbers")
+    @MethodAutoSource("test.wiredcommerce.api.TestArguments#invalidPhoneNumbers")
     @AutoDomainSourceConfiguration
     void 전화번호가_유효하지_않으면_400_상태코드를_반환한다(
         String wrongPhoneNumber,
@@ -123,16 +121,5 @@ public class PostTests {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(204);
-    }
-
-    @SuppressWarnings("unused")
-    private static Stream<Arguments> wrongPhoneNumbers() {
-        return Stream.of(
-            arguments("-1234-5678"),
-            arguments("1234-5678"),
-            arguments("-010-1234-5678"),
-            arguments("010-1234-5678-"),
-            arguments("invalid phone number")
-        );
     }
 }

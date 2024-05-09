@@ -2,7 +2,7 @@ package test.wiredcommerce.api.consumer.signup;
 
 import autoparams.AutoSource;
 import autoparams.BrakeBeforeAnnotation;
-import autoparams.ValueAutoSource;
+import autoparams.MethodAutoSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,13 +71,7 @@ public record PostTests(@Autowired TestRestTemplate client) {
     }
 
     @ParameterizedTest
-    @ValueAutoSource(strings = {
-        "invalid-email",
-        "invalid-email@",
-        "@domain",
-        "invalid-email@domain.",
-        "invalid-email@@domain",
-    })
+    @MethodAutoSource("test.wiredcommerce.api.TestArguments#invalidEmails")
     void 잘못된_형식의_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다(
         String email,
         String password

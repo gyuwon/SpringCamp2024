@@ -12,7 +12,7 @@ import test.wiredcommerce.api.consumer.ChangePhoneNumberGenerator;
 
 @Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-@Customization(ChangePhoneNumberGenerator.class)
+@Customization({ ChangePhoneNumberGenerator.class, PhoneNumberGenerator.class })
 @BrakeBeforeAnnotation(Autowired.class)
 public @interface AutoDomainSourceConfiguration {
 }

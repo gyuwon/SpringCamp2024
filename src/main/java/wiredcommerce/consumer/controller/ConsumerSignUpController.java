@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
+import wiredcommerce.model.Patterns;
 
 @RestController
 public record ConsumerSignUpController(
@@ -19,7 +20,7 @@ public record ConsumerSignUpController(
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
         String email = command.email();
 
-        if (email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}$") == false) {
+        if (email.matches(Patterns.EMAIL) == false) {
             return ResponseEntity.badRequest().build();
         }
 
