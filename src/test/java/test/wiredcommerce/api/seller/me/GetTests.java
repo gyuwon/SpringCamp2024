@@ -15,6 +15,7 @@ import wiredcommerce.seller.view.SellerView;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
+import static test.wiredcommerce.api.ApiTestLanguage.issueConsumerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.issueSellerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.signUp;
 
@@ -112,5 +113,26 @@ public class GetTests {
         SellerView view = response.getBody();
         SellerEntity entity = repository.findByEmail(signUp.email()).orElseThrow();
         assertThat(requireNonNull(view).id()).isEqualTo(entity.getId());
+    }
+
+    @ParameterizedTest
+    @AutoDomainSource
+    void 구매자_토큰을_사용해_접근하면_403_상태코드를_반환한다(
+        wiredcommerce.consumer.command.SignUp signUp,
+        @Autowired TestRestTemplate client
+    ) {
+        // Arrange
+        signUp(client, signUp);
+        String consumerToken = issueConsumerToken(client, signUp.email(), signUp.password());
+
+        // Act
+        RequestEntity<Void> request = RequestEntity
+            .get("/api/seller/me")
+            .header("Authorization", "Bearer " + consumerToken)
+            .build();
+        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(403);
     }
 }

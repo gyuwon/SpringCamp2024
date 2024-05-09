@@ -25,7 +25,10 @@ public record SellerIssueTokenController(
                 query.password(),
                 seller.getEncodedPassword()
             ))
-            .map(seller -> jwtComposer.compose(seller.getId().toString()))
+            .map(seller -> jwtComposer.compose(
+                seller.getId().toString(),
+                new String[] { "SELLER" }
+            ))
             .map(TokenCarrier::new)
             .map(ResponseEntity::ok)
             .orElse(ResponseEntity.badRequest().build());

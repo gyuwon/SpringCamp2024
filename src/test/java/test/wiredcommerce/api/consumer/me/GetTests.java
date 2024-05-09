@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import test.wiredcommerce.api.AutoDomainSource;
 import wiredcommerce.consumer.command.SignUp;
 import wiredcommerce.consumer.view.ConsumerView;
 import wiredcommerce.data.ConsumerEntity;
@@ -17,6 +18,7 @@ import wiredcommerce.data.ConsumerJpaRepository;
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
 import static test.wiredcommerce.api.ApiTestLanguage.issueConsumerToken;
+import static test.wiredcommerce.api.ApiTestLanguage.issueSellerToken;
 import static test.wiredcommerce.api.ApiTestLanguage.signUp;
 
 @SpringBootTest(
@@ -119,5 +121,26 @@ public class GetTests {
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(401);
+    }
+
+    @ParameterizedTest
+    @AutoDomainSource
+    void 판매자_토큰을_사용해_접근하면_403_상태코드를_반환한다(
+        wiredcommerce.seller.command.SignUp signUp,
+        @Autowired TestRestTemplate client
+    ) {
+        // Arrange
+        signUp(client, signUp);
+        String sellerToken = issueSellerToken(client, signUp.email(), signUp.password());
+
+        // Act
+        RequestEntity<Void> request = RequestEntity
+            .get("/api/consumer/me")
+            .header("Authorization", "Bearer " + sellerToken)
+            .build();
+        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(403);
     }
 }

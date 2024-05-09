@@ -2,5 +2,5 @@ package wiredcommerce.security;
 
 public interface JwtComposer {
 
-    String compose(String subject);
+    String compose(String subject, String[] roles);
 }
