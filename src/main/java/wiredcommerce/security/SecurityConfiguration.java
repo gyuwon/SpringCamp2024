@@ -1,5 +1,7 @@
 package wiredcommerce.security;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,9 +14,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class SecurityConfiguration {
+public class SecurityConfiguration implements WebMvcConfigurer {
 
     @Bean
     public AuthenticationProvider authenticationProvider(JwtDecoder jwtDecoder) {
@@ -63,5 +67,10 @@ public class SecurityConfiguration {
                 .requestMatchers("/api/seller/**").hasRole("SELLER")
                 .anyRequest().authenticated())
             .build();
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new UserArgumentResolver());
     }
 }

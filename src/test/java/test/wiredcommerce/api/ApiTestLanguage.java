@@ -6,6 +6,8 @@ import wiredcommerce.consumer.command.ChangePhoneNumber;
 import wiredcommerce.consumer.view.ConsumerSelfView;
 import wiredcommerce.query.IssueToken;
 import wiredcommerce.result.TokenCarrier;
+import wiredcommerce.seller.command.AddNewProduct;
+import wiredcommerce.seller.view.SellerSelfView;
 
 public final class ApiTestLanguage {
 
@@ -67,5 +69,25 @@ public final class ApiTestLanguage {
             TokenCarrier.class
         );
         return carrier.token();
+    }
+
+    public static SellerSelfView meAsSeller(TestRestTemplate client, String token) {
+        RequestEntity<Void> request = RequestEntity
+            .get("/api/seller/me")
+            .header("Authorization", "Bearer " + token)
+            .build();
+        return client.exchange(request, SellerSelfView.class).getBody();
+    }
+
+    public static void addProduct(
+        TestRestTemplate client,
+        String token,
+        AddNewProduct addProduct
+    ) {
+        RequestEntity<AddNewProduct> request = RequestEntity
+            .post("/api/seller/products")
+            .header("Authorization", "Bearer " + token)
+            .body(addProduct);
+        client.exchange(request, Void.class);
     }
 }
