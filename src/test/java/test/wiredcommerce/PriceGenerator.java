@@ -10,6 +10,19 @@ import autoparams.generator.ObjectGenerator;
 
 public class PriceGenerator implements ObjectGenerator {
 
+    private final int minInclusive;
+    private final int maxExclusive;
+
+    public PriceGenerator(int minInclusive, int maxExclusive) {
+        this.minInclusive = minInclusive;
+        this.maxExclusive = maxExclusive;
+    }
+
+    @SuppressWarnings("unused")
+    public PriceGenerator() {
+        this(10000, 1000000);
+    }
+
     @Override
     public ObjectContainer generate(ObjectQuery query, ResolutionContext context) {
         return query.getType().equals(int.class)
@@ -23,8 +36,12 @@ public class PriceGenerator implements ObjectGenerator {
             .getParameterName()
             .map(String::toLowerCase)
             .filter(name -> name.endsWith("price"))
-            .map(name -> ThreadLocalRandom.current().nextInt(10000, 1000000))
+            .map(name -> ThreadLocalRandom.current().nextInt(minInclusive, maxExclusive))
             .map(ObjectContainer::new)
             .orElse(ObjectContainer.EMPTY);
+    }
+
+    public static PriceGenerator price(int minInclusive, int maxExclusive) {
+        return new PriceGenerator(minInclusive, maxExclusive);
     }
 }

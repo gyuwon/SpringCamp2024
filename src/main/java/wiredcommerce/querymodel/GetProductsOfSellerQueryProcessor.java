@@ -3,30 +3,31 @@ package wiredcommerce.querymodel;
 import java.util.List;
 
 import jakarta.persistence.EntityManager;
+import lombok.AllArgsConstructor;
 import wiredcommerce.query.GetProductsOfSeller;
 import wiredcommerce.view.ProductView;
 
+@AllArgsConstructor
 public class GetProductsOfSellerQueryProcessor {
+
+    private static final String QUERY_STRING = """
+        SELECT new wiredcommerce.querymodel.ProductWithSeller(p, s)
+        FROM ProductEntity p
+        JOIN SellerEntity s ON p.sellerId = s.id
+        WHERE p.sellerId = :sellerId
+        """;
 
     private final EntityManager entityManager;
 
-    public GetProductsOfSellerQueryProcessor(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public List<ProductView> process(GetProductsOfSeller query) {
+        List<ProductWithSeller> results = fetchData(query);
+        return results.stream().map(ProductWithSeller::toView).toList();
     }
 
-    public List<ProductView> process(GetProductsOfSeller query) {
-        String queryString = """
-            SELECT new wiredcommerce.querymodel.ProductWithSeller(p, s)
-            FROM ProductEntity p
-            JOIN SellerEntity s ON p.sellerId = s.id
-            WHERE p.sellerId = :sellerId
-            """;
-
-        List<ProductWithSeller> results = entityManager
-            .createQuery(queryString, ProductWithSeller.class)
+    private List<ProductWithSeller> fetchData(GetProductsOfSeller query) {
+        return entityManager
+            .createQuery(QUERY_STRING, ProductWithSeller.class)
             .setParameter("sellerId", query.sellerId())
             .getResultList();
-
-        return results.stream().map(ProductWithSeller::toView).toList();
     }
 }
