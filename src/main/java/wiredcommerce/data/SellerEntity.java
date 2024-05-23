@@ -17,7 +17,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@Table(indexes = { @Index(columnList = "email", unique = true) })
+@Table(indexes = {
+    @Index(columnList = "email", unique = true),
+    @Index(columnList = "username", unique = true)
+})
 public class SellerEntity {
 
     @Id
@@ -26,6 +29,9 @@ public class SellerEntity {
 
     @Setter
     private String email;
+
+    @Setter
+    private String username;
 
     @Setter
     @Column(length = 1000)

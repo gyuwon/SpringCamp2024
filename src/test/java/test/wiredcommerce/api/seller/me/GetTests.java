@@ -71,6 +71,28 @@ public class GetTests {
 
     @ParameterizedTest
     @AutoDomainSource
+    void 응답_컨텐트는_올바른_사용자이름을_포함한다(
+        SignUp signUp,
+        @Autowired TestRestTemplate client
+    ) {
+        // Arrange
+        signUp(client, signUp);
+        String token = issueSellerToken(client, signUp.email(), signUp.password());
+
+        // Act
+        RequestEntity<Void> request = RequestEntity
+            .get("/api/seller/me")
+            .header("Authorization", "Bearer " + token)
+            .build();
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
+
+        // Assert
+        SellerSelfView self = response.getBody();
+        assertThat(requireNonNull(self).username()).isEqualTo(signUp.username());
+    }
+
+    @ParameterizedTest
+    @AutoDomainSource
     void 응답_컨텐트는_올바른_전화번호를_포함한다(
         SignUp signUp,
         @Autowired TestRestTemplate client

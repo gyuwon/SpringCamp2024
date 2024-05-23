@@ -29,6 +29,7 @@ public record SellerSignUpController(
         SellerEntity seller = SellerEntity
             .builder()
             .email(command.email())
+            .username(command.username())
             .encodedPassword(passwordEncoder.encode(command.password()))
             .phoneNumber(command.phoneNumber())
             .build();

@@ -18,6 +18,7 @@ public record SellerController(SellerJpaRepository repository) {
         SellerSelfView view = new SellerSelfView(
             seller.getId(),
             seller.getEmail(),
+            seller.getUsername(),
             seller.getPhoneNumber()
         );
         return ResponseEntity.ok(view);
