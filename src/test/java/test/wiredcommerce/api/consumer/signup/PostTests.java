@@ -30,4 +30,24 @@ public record PostTests(@Autowired TestRestTemplate client) {
         // Assert
         assertThat(response.getStatusCode().is2xxSuccessful()).isTrue();
     }
+
+    @Test
+    void 존재하는_이메일_주소를_사용해_요청하면_400_상태코드를_반환한다() {
+        // Arrange
+        String path = "/api/consumer/signup";
+        String email = "user@test.com";
+        String password1 = "my password 1";
+        String password2 = "my password 2";
+        client.postForEntity(path, new SignUp(email, password1), Void.class);
+
+        // Act
+        ResponseEntity<Void> response = client.postForEntity(
+            path,
+            new SignUp(email, password2),
+            Void.class
+        );
+
+        // Assert
+        assertThat(response.getStatusCode().value()).isEqualTo(400);
+    }
 }
