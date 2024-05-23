@@ -25,4 +25,7 @@ public class ConsumerEntity {
 
     @Setter
     private String email;
+
+    @Setter
+    private String password;
 }

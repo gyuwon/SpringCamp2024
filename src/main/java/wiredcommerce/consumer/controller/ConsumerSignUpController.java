@@ -13,7 +13,11 @@ public record ConsumerSignUpController(ConsumerJpaRepository repository) {
 
     @PostMapping("/api/consumer/signup")
     public ResponseEntity<Void> signUp(@RequestBody SignUp command) {
-        ConsumerEntity consumer = ConsumerEntity.builder().email(command.email()).build();
+        ConsumerEntity consumer = ConsumerEntity
+            .builder()
+            .email(command.email())
+            .password(command.password())
+            .build();
         try {
             repository.save(consumer);
         } catch (Exception exception) {
