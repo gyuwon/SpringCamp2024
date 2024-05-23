@@ -11,7 +11,7 @@ import test.wiredcommerce.AutoDomainSource;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
 import wiredcommerce.seller.command.SignUp;
-import wiredcommerce.seller.view.SellerView;
+import wiredcommerce.seller.view.SellerSelfView;
 
 import static java.util.Objects.requireNonNull;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,7 +41,7 @@ public class GetTests {
             .get("/api/seller/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -62,11 +62,11 @@ public class GetTests {
             .get("/api/seller/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
 
         // Assert
-        SellerView seller = response.getBody();
-        assertThat(requireNonNull(seller).email()).isEqualTo(signUp.email());
+        SellerSelfView self = response.getBody();
+        assertThat(requireNonNull(self).email()).isEqualTo(signUp.email());
     }
 
     @ParameterizedTest
@@ -84,11 +84,11 @@ public class GetTests {
             .get("/api/seller/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
 
         // Assert
-        SellerView seller = response.getBody();
-        assertThat(requireNonNull(seller).phoneNumber()).isEqualTo(signUp.phoneNumber());
+        SellerSelfView self = response.getBody();
+        assertThat(requireNonNull(self).phoneNumber()).isEqualTo(signUp.phoneNumber());
     }
 
     @ParameterizedTest
@@ -107,10 +107,10 @@ public class GetTests {
             .get("/api/seller/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
 
         // Assert
-        SellerView view = response.getBody();
+        SellerSelfView view = response.getBody();
         SellerEntity entity = repository.findByEmail(signUp.email()).orElseThrow();
         assertThat(requireNonNull(view).id()).isEqualTo(entity.getId());
     }
@@ -130,7 +130,7 @@ public class GetTests {
             .get("/api/seller/me")
             .header("Authorization", "Bearer " + consumerToken)
             .build();
-        ResponseEntity<SellerView> response = client.exchange(request, SellerView.class);
+        ResponseEntity<SellerSelfView> response = client.exchange(request, SellerSelfView.class);
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(403);

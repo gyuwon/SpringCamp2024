@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import wiredcommerce.data.SellerEntity;
 import wiredcommerce.data.SellerJpaRepository;
-import wiredcommerce.seller.view.SellerView;
+import wiredcommerce.seller.view.SellerSelfView;
 
 @RestController
 public record SellerController(SellerJpaRepository repository) {
 
     @GetMapping("/api/seller/me")
-    public ResponseEntity<SellerView> me(Principal principal) {
+    public ResponseEntity<SellerSelfView> me(Principal principal) {
         SellerEntity seller = repository.get(principal);
-        SellerView view = new SellerView(
+        SellerSelfView view = new SellerSelfView(
             seller.getId(),
             seller.getEmail(),
             seller.getPhoneNumber()
