@@ -1,7 +1,6 @@
 package test.wiredcommerce.api.consumer.changephonenumber;
 
 import autoparams.MethodAutoSource;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import test.wiredcommerce.AutoDomainSourceConfiguration;
 import wiredcommerce.CommerceApplication;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
 import wiredcommerce.consumer.command.SignUp;
-import wiredcommerce.consumer.view.ConsumerView;
+import wiredcommerce.consumer.view.ConsumerSelfView;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static test.wiredcommerce.api.ApiTestLanguage.changePhoneNumber;
@@ -48,8 +47,8 @@ public class PostTests {
         client.exchange(request, Void.class);
 
         // Assert
-        ConsumerView consumer = meAsConsumer(client, token);
-        assertThat(consumer.phoneNumber()).isEqualTo(changePhoneNumber.phoneNumber());
+        ConsumerSelfView self = meAsConsumer(client, token);
+        assertThat(self.phoneNumber()).isEqualTo(changePhoneNumber.phoneNumber());
     }
 
     @ParameterizedTest
@@ -74,8 +73,8 @@ public class PostTests {
         client.exchange(request, Void.class);
 
         // Assert
-        ConsumerView consumer = meAsConsumer(client, token);
-        assertThat(consumer.phoneNumber()).isEqualTo(changePhoneNumber.phoneNumber());
+        ConsumerSelfView self = meAsConsumer(client, token);
+        assertThat(self.phoneNumber()).isEqualTo(changePhoneNumber.phoneNumber());
     }
 
     @ParameterizedTest

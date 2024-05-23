@@ -11,7 +11,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import test.wiredcommerce.AutoDomainSource;
 import wiredcommerce.consumer.command.SignUp;
-import wiredcommerce.consumer.view.ConsumerView;
+import wiredcommerce.consumer.view.ConsumerSelfView;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
 
@@ -44,7 +44,7 @@ public class GetTests {
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+        ResponseEntity<ConsumerSelfView> response = client.exchange(request, ConsumerSelfView.class);
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(200);
@@ -66,10 +66,10 @@ public class GetTests {
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+        ResponseEntity<ConsumerSelfView> response = client.exchange(request, ConsumerSelfView.class);
 
         // Assert
-        ConsumerView view = response.getBody();
+        ConsumerSelfView view = response.getBody();
         assertThat(requireNonNull(view).email()).isEqualTo(signUp.email());
     }
 
@@ -90,10 +90,10 @@ public class GetTests {
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+        ResponseEntity<ConsumerSelfView> response = client.exchange(request, ConsumerSelfView.class);
 
         // Assert
-        ConsumerView view = response.getBody();
+        ConsumerSelfView view = response.getBody();
         ConsumerEntity entity = repository.findByEmail(signUp.email()).orElseThrow();
         assertThat(requireNonNull(view).id()).isEqualTo(entity.getId());
     }
@@ -117,7 +117,7 @@ public class GetTests {
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+        ResponseEntity<ConsumerSelfView> response = client.exchange(request, ConsumerSelfView.class);
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(401);
@@ -138,7 +138,7 @@ public class GetTests {
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + sellerToken)
             .build();
-        ResponseEntity<ConsumerView> response = client.exchange(request, ConsumerView.class);
+        ResponseEntity<ConsumerSelfView> response = client.exchange(request, ConsumerSelfView.class);
 
         // Assert
         assertThat(response.getStatusCode().value()).isEqualTo(403);

@@ -3,7 +3,7 @@ package test.wiredcommerce.api;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.RequestEntity;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
-import wiredcommerce.consumer.view.ConsumerView;
+import wiredcommerce.consumer.view.ConsumerSelfView;
 import wiredcommerce.query.IssueToken;
 import wiredcommerce.result.TokenCarrier;
 
@@ -29,12 +29,12 @@ public final class ApiTestLanguage {
         return carrier.token();
     }
 
-    public static ConsumerView meAsConsumer(TestRestTemplate client, String token) {
+    public static ConsumerSelfView meAsConsumer(TestRestTemplate client, String token) {
         RequestEntity<Void> request = RequestEntity
             .get("/api/consumer/me")
             .header("Authorization", "Bearer " + token)
             .build();
-        return client.exchange(request, ConsumerView.class).getBody();
+        return client.exchange(request, ConsumerSelfView.class).getBody();
     }
 
     public static void changePhoneNumber(

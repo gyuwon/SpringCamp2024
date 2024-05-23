@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import wiredcommerce.commandmodel.Patterns;
 import wiredcommerce.consumer.command.ChangePhoneNumber;
-import wiredcommerce.consumer.view.ConsumerView;
+import wiredcommerce.consumer.view.ConsumerSelfView;
 import wiredcommerce.data.ConsumerEntity;
 import wiredcommerce.data.ConsumerJpaRepository;
 
@@ -17,9 +17,9 @@ import wiredcommerce.data.ConsumerJpaRepository;
 public record ConsumerController(ConsumerJpaRepository repository) {
 
     @GetMapping("/api/consumer/me")
-    public ResponseEntity<ConsumerView> me(Principal principal) {
+    public ResponseEntity<ConsumerSelfView> me(Principal principal) {
         ConsumerEntity entity = repository.get(principal);
-        ConsumerView view = new ConsumerView(
+        ConsumerSelfView view = new ConsumerSelfView(
             entity.getId(),
             entity.getEmail(),
             entity.getPhoneNumber()
