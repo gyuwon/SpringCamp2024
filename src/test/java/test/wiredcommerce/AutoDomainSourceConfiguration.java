@@ -8,12 +8,10 @@ import java.lang.annotation.Target;
 import autoparams.BrakeBeforeAnnotation;
 import autoparams.customization.Customization;
 import org.springframework.beans.factory.annotation.Autowired;
-import test.wiredcommerce.api.consumer.ChangePhoneNumberGenerator;
 
 @Target({ ElementType.ANNOTATION_TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 @Customization({
-    ChangePhoneNumberGenerator.class,
     PhoneNumberGenerator.class,
     PriceGenerator.class,
     QuantityGenerator.class,
